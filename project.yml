@@ -1,0 +1,33 @@
+#
+# project.yml
+#
+
+shell: powershell
+variables:
+  SRC_PATH: src/
+  DIST_PATH: dist/
+  PHAR_FILE: dist/yamltodocx.phar
+  TMP_PATH: tmp/
+
+build:
+  script:
+    - if (Test-Path $env:DIST_PATH) { rm -Recurse ./$env:DIST_PATH }
+    - mkdir $env:TMP_PATH
+    - cp index.php,$env:SRC_PATH,composer.json,LICENSE -Destination $env:TMP_PATH -Recurse
+    - Start-Process -FilePath composer -ArgumentList "install --no-dev" -WorkingDirectory $env:TMP_PATH -NoNewWindow -Wait
+    - rm $env:TMP_PATH/composer.*
+    - mkdir $env:DIST_PATH
+    - php phar.php $env:TMP_PATH index.php $env:PHAR_FILE
+    - rm $env:PHAR_FILE
+    - mv "$env:PHAR_FILE.gz" $env:PHAR_FILE
+    - New-Checksum $env:PHAR_FILE -Destination $env:DIST_PATH
+    - rm -Recurse $env:TMP_PATH
+
+test:
+  script: ./vendor/bin/phpunit --bootstrap vendor/autoload.php tests
+
+clean:
+  script:
+    - if (Test-Path $env:DIST_PATH) { rm -Recurse ./$env:DIST_PATH }
+    - if (Test-Path $env:TMP_PATH) { rm -Recurse ./$env:TMP_PATH }
+    - ls -Filter .phpunit.result.cache | rm

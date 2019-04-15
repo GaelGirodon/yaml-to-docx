@@ -1,0 +1,18 @@
+# Basic variables
+title: Lorem ipsum
+subtitle: Dolor sit amet, consectetur adipiscing elit
+content: |-
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+  Sed lobortis elit ut orci convallis, sed iaculis diam ultricies.
+  Duis vestibulum pellentesque arcu, et interdum dui.
+# Array
+name: # Array row selector
+  - name: "Name 1"
+    desc: "Description 1"
+    value: "Value 1"
+  - name: "Name 2"
+    desc: "Description 2"
+    value: "Value 2"
+  - name: "Name 3"
+    desc: "Description 3"
+    value: "Value 3"

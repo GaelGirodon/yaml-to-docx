@@ -1,0 +1,19 @@
+#
+# .gitignore
+#
+
+# Composer
+vendor/
+*.phar
+
+# PHPUnit
+.phpunit.*
+*.tmp.*
+
+# IDE
+.idea/
+*.iml
+
+# Project
+dist/
+tmp/

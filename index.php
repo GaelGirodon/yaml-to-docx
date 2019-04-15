@@ -7,7 +7,7 @@ use YamlToDocx\YamlToDocxCommand;
 require __DIR__ . '/vendor/autoload.php';
 
 /* Initialize the CLI */
-$application = new Application('yamltodocx', '0.1.0-dev');
+$application = new Application('yamltodocx', '0.1.0');
 $command = new YamlToDocxCommand();
 $application->add($command);
 $application->setDefaultCommand($command->getName(), true);

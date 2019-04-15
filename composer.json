@@ -1,6 +1,7 @@
 {
     "name": "gaelgirodon/yaml-to-docx",
     "description": "A tool to generate Word documents from a template and a YAML file with values",
+    "version": "0.1.0",
     "type": "library",
     "license": "GPL-3.0-or-later",
     "authors": [

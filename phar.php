@@ -21,6 +21,6 @@ $pharFile = $argv[3];
 $phar = new Phar($pharFile);
 $phar->buildFromDirectory($src);
 $phar->setDefaultStub($defaultStub, "/$defaultStub");
-//$p->compress(Phar::GZ);
+$phar->compress(Phar::GZ);
 
 echo "$pharFile successfully created", PHP_EOL;

@@ -7,10 +7,9 @@ variables:
   SRC_PATH: src/
   DIST_PATH: dist/
   PHAR_FILE: dist/yamltodocx.phar
+  TMP_PATH: tmp/
 
 build:
-  variables:
-    TMP_PATH: tmp/
   script:
     - if (Test-Path $env:DIST_PATH) { rm -Recurse ./$env:DIST_PATH }
     - mkdir $env:TMP_PATH
@@ -19,6 +18,8 @@ build:
     - rm $env:TMP_PATH/composer.*
     - mkdir $env:DIST_PATH
     - php phar.php $env:TMP_PATH index.php $env:PHAR_FILE
+    - rm $env:PHAR_FILE
+    - mv "$env:PHAR_FILE.gz" $env:PHAR_FILE
     - New-Checksum $env:PHAR_FILE -Destination $env:DIST_PATH
     - rm -Recurse $env:TMP_PATH
 
@@ -28,4 +29,5 @@ test:
 clean:
   script:
     - if (Test-Path $env:DIST_PATH) { rm -Recurse ./$env:DIST_PATH }
-    - ls .phpunit.result.cache | rm
+    - if (Test-Path $env:TMP_PATH) { rm -Recurse ./$env:TMP_PATH }
+    - ls -Filter .phpunit.result.cache | rm

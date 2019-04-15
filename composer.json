@@ -1,0 +1,29 @@
+{
+    "name": "gaelgirodon/yaml-to-docx",
+    "description": "A tool to generate Word documents from a template and a YAML file with values",
+    "type": "library",
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Gael Girodon",
+            "email": "contact@gaelgirodon.fr"
+        }
+    ],
+    "bin": "index.php",
+    "require": {
+        "phpoffice/phpword": "^0.16.0",
+        "symfony/console": "^4.2",
+        "symfony/yaml": "^4.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8"
+    },
+    "autoload": {
+        "classmap": [
+            "src/"
+        ],
+        "psr-4": {
+            "YamlToDocx\\": "src"
+        }
+    }
+}

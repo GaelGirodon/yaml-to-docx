@@ -34,14 +34,22 @@ the generated `.docx` to the specified output file (`<output>`).
 ### CLI
 
 ```shell
-php yamltodocx.phar <template> <values> <output>
+php yamltodocx.phar <template> <values> <output> [--overwrite]
 ```
+
+#### Arguments
 
 | Argument     | Description                       | Example                 |
 | ------------ | --------------------------------- | ----------------------- |
 | `<template>` | Path to the template file         | `path/to/template.docx` |
 | `<values>`   | Path to the YAML file with values | `path/to/values.yml`    |
 | `<output>`   | Path to the output file           | `path/to/output.docx`   |
+
+#### Options
+
+| Option        | Shortcut | Description                                    |
+| ------------- | -------- | ---------------------------------------------- |
+| `--overwrite` | `-o`     | Overwrite the output file if it already exists |
 
 ## Example
 

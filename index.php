@@ -3,16 +3,16 @@
 use Symfony\Component\Console\Application;
 use YamlToDocx\YamlToDocxCommand;
 
-// Autoloading
+/* Autoloading */
 require __DIR__ . '/vendor/autoload.php';
 
-// Initialize the CLI
+/* Initialize the CLI */
 $application = new Application('yamltodocx', '0.1.0-dev');
 $command = new YamlToDocxCommand();
 $application->add($command);
 $application->setDefaultCommand($command->getName(), true);
 
-// Run
+/* Run */
 try {
     $application->run();
 } catch (\Exception $e) {

@@ -33,11 +33,12 @@ class YamlToDocxGenerator
     /**
      * Generate a docx file from a template with placeholders
      * and a YAML file containing values to populate.
-     * @param $tmpl string Path to the Word template with placeholders.
-     * @param $yaml string Path to the YAML file containing values to populate.
-     * @param $output string Path to the output Word file.
+     * @param string $tmpl Path to the Word template with placeholders.
+     * @param string $yaml Path to the YAML file containing values to populate.
+     * @param string $output Path to the output Word file.
+     * @param bool $overwrite Overwrite the output file.
      */
-    public function generate($tmpl, $yaml, $output)
+    public function generate(string $tmpl, string $yaml, string $output, bool $overwrite)
     {
         /* Arguments */
         $tmpl = self::cleanpath($tmpl);
@@ -51,8 +52,12 @@ class YamlToDocxGenerator
         if (strlen($yaml) == 0 || !file_exists($yaml)) {
             throw new RuntimeException("The YAML file '$yaml' doesn't exist.", 11);
         }
-        if (strlen($output) == 0 || !file_exists(dirname($output)) || is_file($output)) {
+        if (strlen($output) == 0 || !file_exists(dirname($output))
+            && !file_exists(dirname($output = self::cleanpath(getcwd() . '/' . $output)))) {
             throw new RuntimeException("The output path '$output' is invalid.", 12);
+        }
+        if (!$overwrite && is_file($output)) {
+            throw new RuntimeException("The output file '$output' already exists (overwrite it with -o option).", 13);
         }
 
         /* Parse variables from YAML file */
@@ -100,7 +105,7 @@ class YamlToDocxGenerator
 
     /**
      * Clean a path.
-     * @param $path string The path to clean.
+     * @param string $path The path to clean.
      * @return string The clean path.
      */
     private static function cleanpath(string $path)

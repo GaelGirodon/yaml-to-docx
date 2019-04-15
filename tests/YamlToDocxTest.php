@@ -19,13 +19,22 @@ final class YamlToDocxTest extends TestCase
     {
         /* Test cases */
         $tests = [
-            'no-args' => ['args' => [], 'error' => 'Not enough arguments'],
-            'args/err/1' => ['args' => ['template' => 'un/known'], 'error' => 'Not enough arguments'],
-            'args/err/2' => ['args' => ['template' => 'un/known', 'values' => 'un/known', 'output' => 'un/known'], 'error' => 'The template file'],
-            'args/err/3' => ['args' => ['template' => self::data('tmpl.docx'), 'values' => 'un/known', 'output' => 'un/known'], 'error' => 'The YAML file'],
-            'args/err/4' => ['args' => ['template' => self::data('tmpl.docx'), 'values' => self::data('tmpl.docx'), 'output' => self::data('out.tmp.docx')], 'error' => 'The YAML value'],
-            'args/err/5' => ['args' => ['template' => self::data('tmpl.docx'), 'values' => self::data('val.yml'), 'output' => 'un/known'], 'error' => 'The output path'],
-            'ok' => ['args' => ['template' => self::data('tmpl.docx'), 'values' => self::data('val.yml'), 'output' => self::data('out.tmp.docx')], 'error' => false],
+            'err/args/0' => ['args' => [], 'error' => 'Not enough arguments'],
+            'err/args/1' => ['args' => ['template' => 'un/known'], 'error' => 'Not enough arguments'],
+            'err/args/2' => ['args' => ['template' => 'un/known', 'values' => 'un/known', 'output' => 'un/known'],
+                'error' => 'The template file'],
+            'err/args/3' => ['args' => ['template' => self::data('tmpl.docx'), 'values' => 'un/known', 'output' => 'un/known'],
+                'error' => 'The YAML file'],
+            'err/args/4' => ['args' => ['template' => self::data('tmpl.docx'), 'values' => self::data('tmpl.docx'),
+                'output' => self::data('out.tmp.docx')], 'error' => 'The YAML value'],
+            'err/args/5' => ['args' => ['template' => self::data('tmpl.docx'), 'values' => self::data('val.yml'),
+                'output' => 'un/known'], 'error' => 'The output path'],
+            'err/overwrite' => ['args' => ['template' => self::data('tmpl.docx'), 'values' => self::data('val.yml'),
+                'output' => self::data('exists.tmp.docx')], 'files' => [self::data('exists.tmp.docx')], 'error' => 'The output file'],
+            'ok' => ['args' => ['template' => self::data('tmpl.docx'), 'values' => self::data('val.yml'),
+                'output' => self::data('out.tmp.docx')], 'error' => false],
+            'ok/overwrite' => ['args' => ['template' => self::data('tmpl.docx'), 'values' => self::data('val.yml'),
+                'output' => self::data('exists.tmp.docx'), '--overwrite' => true], 'files' => [self::data('exists.tmp.docx')]],
         ];
         /* Run tests */
         foreach ($tests as $name => $test) {
@@ -34,6 +43,12 @@ final class YamlToDocxTest extends TestCase
             $app = self::bootstrap();
             $command = $app->find('yamltodocx');
             $tester = new CommandTester($command);
+            /* Initial files */
+            if (array_key_exists('files', $test) && count($test['files']) > 0) {
+                foreach ($test['files'] as $file) {
+                    touch($file);
+                }
+            }
             /* Run and test the command */
             try {
                 $tester->execute(array_merge(['command' => $command->getName()], $test['args']));
@@ -44,6 +59,14 @@ final class YamlToDocxTest extends TestCase
                     $this->assertStringContainsStringIgnoringCase($test['error'], $e->getMessage());
                 } else {
                     $this->fail('Unexpected error: ' . $e->getMessage());
+                }
+            }
+            /* Clean up initial files */
+            if (array_key_exists('files', $test) && count($test['files']) > 0) {
+                foreach ($test['files'] as $file) {
+                    if (file_exists($file)) {
+                        unlink($file);
+                    }
                 }
             }
         }
